@@ -1,0 +1,27 @@
+import chess.pgn
+import pandas as pd
+import glob
+
+
+totalGameCount = 0
+totalEvalGameCount = 0
+fileList = glob.glob(r"C:\Users\mdurr\Code\cmsc320\final\data\*.pgn") # modify this line for the directory that has all the pgn files 
+rows_list = [] # list of dictionaries for each game 
+for file in fileList:
+    pgn = open(fileList[0])
+    game = chess.pgn.read_game(pgn)
+    while game != None:
+        totalGameCount += 1
+        variations = game.variations # list of either the eval or clock score
+        if(totalGameCount % 2000 == 0): # print every 2000 games
+            print("Total Game Count: ", totalGameCount)
+            print("Eval Game Count: ", totalEvalGameCount)
+        if(len(variations) > 0 and 'eval' in variations[0].comment): # if this game was evaluated by a computer, add it
+            totalEvalGameCount+=1
+            h = game.headers
+            # adding a dictionary is faster than appending to a dataframe 
+            rows_list.append({"UTCDate": h["UTCDate"], 'Result':h['Result'], 'WhiteElo':h['WhiteElo'], 'BlackElo':h['BlackElo'], "Opening": "0", "Something":"0", "Termination": h["Termination"], "Variations":str(variations[0]), 'WhiteRatingDiff':h['WhiteRatingDiff'], 'BlackRatingDiff':h["BlackRatingDiff"]})
+        game = chess.pgn.read_game(pgn)
+
+df = pd.DataFrame(rows_list) # add everything to the dataframe              
+
