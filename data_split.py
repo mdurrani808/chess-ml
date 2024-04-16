@@ -3,8 +3,8 @@ import pandas as pd
 import glob
 import numpy as np
 
-pgnFilePath =  r"\\wsl.localhost\Ubuntu\home\mdurrani\lichess_db_standard_rated_2024-03.pgn"
-# pgnFilePath = r"C:\Users\pranavshah\Code\320\cmsc320_final_project\data\*.pgn"
+#pgnFilePath =  r"\\wsl.localhost\Ubuntu\home\mdurrani\lichess_db_standard_rated_2024-03.pgn"
+pgnFilePath = r'./data/*.pgn'
 outputFilePath = "./evaluations.csv"
 totalGameCount = 0
 totalEvalGameCount = 0
@@ -19,6 +19,9 @@ for file in fileList:
         if(totalGameCount % 2000 == 0): # print every 2000 games
             print("Total Game Count: ", totalGameCount)
             print("Eval Game Count: ", totalEvalGameCount)
+        if(totalGameCount % 1000000 == 0):
+            df = pd.DataFrame(rows_list) # add everything to the dataframe 
+            df.to_csv(outputFilePath)
         if(len(variations) > 0 and 'eval' in variations[0].comment): # if this game was evaluated by a computer, add it
             totalEvalGameCount+=1
             h = game.headers
@@ -39,8 +42,5 @@ for file in fileList:
             })
 
         # Iterator reading next game
-        game = chess.pgn.read_game(pgn)
-
-df = pd.DataFrame(rows_list) # add everything to the dataframe 
-df.to_csv(outputFilePath)             
+        game = chess.pgn.read_game(pgn)          
 
