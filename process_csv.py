@@ -1,10 +1,10 @@
 import pandas as pd 
 import re
+#from sklearn import preprocessing
 
 # Read data back in from csv and ignore the first column because it just contains the indicies.
 # We only want white and black elo, opening category, result, and variations
 df= pd.read_csv("miniEvaluations.csv", usecols=["WhiteElo", "BlackElo", "ECO", "Result", "Variations"])
-
 
 # Get white mistake differential from a game
 def getMistakeDifferential(variation):
@@ -83,6 +83,4 @@ df["whiteResult"] = df["Result"].apply(getResultForWhite)
 
 trainingDf = df.loc[:, ["whiteMistakeDifferential", "whiteTimeDifferential", "whiteEloDifferential", "whiteResult"]]
 
-print(trainingDf)
-
-
+print(df.head())
