@@ -6,7 +6,9 @@ import re
 # We only want white and black elo, opening category, result, and variations
 df= pd.read_csv("miniEvaluations.csv", usecols=["WhiteElo", "BlackElo", "ECO", "Result", "Variations"])
 
-# Get white mistake differential from a game
+# All data will be from the perspective of white 
+
+# Get mistake differential from a game
 def getMistakeDifferential(variation):
     # Find all evaluations
     evalText = re.findall(r'%eval -?\d.\d*', variation)
@@ -30,7 +32,7 @@ def getMistakeDifferential(variation):
     whiteMistakeDifferential = numberOfWhiteMistakes - numberOfBlackMistakes
     return whiteMistakeDifferential
 
-# Get white time differential from a game
+# Get time differential from a game
 def getTimeDifferential(variation):
     # Find all clock text
     clockText = re.findall(r'%clk \d:\d{2}:\d{2}', variation)
@@ -64,7 +66,7 @@ def getTimeDifferential(variation):
 
     return whiteTimeDifferential
 
-# Turn string result into a number result from white's perspective   
+# Turn string result into a number result 
 def getResultForWhite(result):
     if result == "0-1":
         return 0
@@ -73,14 +75,14 @@ def getResultForWhite(result):
     else:
         return 0.5
 
-df["whiteMistakeDifferential"] = df["Variations"].apply(getMistakeDifferential)
+df["MistakeDifferential"] = df["Variations"].apply(getMistakeDifferential)
 
-df["whiteTimeDifferential"] = df["Variations"].apply(getTimeDifferential)
+df["TimeDifferential"] = df["Variations"].apply(getTimeDifferential)
 
-df["whiteEloDifferential"] = df["WhiteElo"] - df["BlackElo"]
+df["EloDifferential"] = df["WhiteElo"] - df["BlackElo"]
 
-df["whiteResult"] = df["Result"].apply(getResultForWhite)
+df["Result"] = df["Result"].apply(getResultForWhite)
 
-trainingDf = df.loc[:, ["whiteMistakeDifferential", "whiteTimeDifferential", "whiteEloDifferential", "whiteResult"]]
+df = df.drop(["Variations", "WhiteElo", "BlackElo"], axis=1)
 
 print(df.head())
