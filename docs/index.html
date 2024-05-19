@@ -7975,6 +7975,7 @@ a.anchor-link {
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
 
 <span class="k">def</span> <span class="nf">setupGame</span><span class="p">():</span>
+    <span class="c1"># Setup the starting board</span>
     <span class="n">gameArr</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">""</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
     <span class="n">setupArr</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"R"</span><span class="p">,</span> <span class="s2">"N"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"Q"</span><span class="p">,</span> <span class="s2">"K"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"N"</span><span class="p">,</span> <span class="s2">"R"</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
@@ -7986,8 +7987,11 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">gameArr</span>
 
 <span class="k">def</span> <span class="nf">makeMove</span><span class="p">(</span><span class="n">gameArr</span><span class="p">,</span> <span class="n">move</span><span class="p">,</span> <span class="n">moveNum</span><span class="p">):</span>
+    <span class="c1"># Each move can either be a regular move from one place to another, </span>
+    <span class="c1"># or it can be a special move with more steps than a simple move</span>
     <span class="n">piece</span><span class="p">,</span> <span class="n">specifier</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">rank</span> <span class="o">=</span> <span class="n">breakMoveUp</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
     <span class="n">color</span> <span class="o">=</span> <span class="s2">"W"</span> <span class="k">if</span> <span class="n">moveNum</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"B"</span>
+    <span class="c1"># A castle is simply a rearranging of King and Rook</span>
     <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">"Castle"</span><span class="p">:</span>
         <span class="n">colorRank</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s2">"W"</span> <span class="k">else</span> <span class="mi">7</span>
         <span class="n">gameArr</span><span class="p">[</span><span class="n">colorRank</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
@@ -8000,6 +8004,7 @@ a.anchor-link {
         <span class="n">gameArr</span><span class="p">[</span><span class="n">colorRank</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span> <span class="o">+</span> <span class="s2">"K"</span>
         <span class="n">gameArr</span><span class="p">[</span><span class="n">colorRank</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span> <span class="o">+</span> <span class="s2">"R"</span>
         <span class="n">gameArr</span><span class="p">[</span><span class="n">colorRank</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="c1"># A promotion is a pawn move to the last rank and then a swap to a different piece</span>
     <span class="k">elif</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">"Promotion"</span><span class="p">:</span>
         <span class="n">firstMove</span> <span class="o">=</span> <span class="n">move</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">makeMove</span><span class="p">(</span><span class="n">gameArr</span><span class="p">,</span> <span class="n">firstMove</span><span class="p">,</span> <span class="n">moveNum</span><span class="p">)</span>
@@ -8011,8 +8016,10 @@ a.anchor-link {
         <span class="n">piece</span> <span class="o">=</span> <span class="n">color</span> <span class="o">+</span> <span class="n">piece</span>
         <span class="n">col</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"a"</span><span class="p">)</span>
         <span class="n">row</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="c1"># Need to find the current piece that's being moved</span>
         <span class="n">curRow</span><span class="p">,</span><span class="n">curCol</span> <span class="o">=</span> <span class="n">findPiecePos</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">specifier</span><span class="p">,</span> <span class="n">gameArr</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
-        <span class="c1">#En Passant Condition</span>
+        <span class="c1">#En Passant Condition: If a piece was captured by a pawn </span>
+        <span class="c1"># and the new location for it had no piece to begin with, then it must be an en passant</span>
         <span class="k">if</span> <span class="s2">"x"</span> <span class="ow">in</span> <span class="n">move</span> <span class="ow">and</span> <span class="n">gameArr</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s2">"W"</span><span class="p">:</span>
                 <span class="c1"># Erasing black piece, so add 1</span>
@@ -8039,6 +8046,11 @@ a.anchor-link {
             <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="n">gameArr</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span><span class="n">col</span><span class="o">==-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">j</span><span class="o">==</span><span class="n">col</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">row</span><span class="o">==-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">i</span><span class="o">==</span><span class="n">row</span><span class="p">):</span>
                 <span class="n">colDistance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">endCol</span><span class="o">-</span><span class="n">j</span><span class="p">)</span>
                 <span class="n">rowDistance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">endRow</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+                <span class="c1"># An original position for a piece is valid when these conditions are satisfied:</span>
+                <span class="c1"># 1. The piece's movement rules are followed ex. N moves 2 squares one way and 1 square the other way</span>
+                <span class="c1"># 2. The piece's path to its destination is unobstructed</span>
+                <span class="c1"># 3. The piece's movement doesn't leave its king in check</span>
+                <span class="c1">#If positions satisfy movement rules of the piece</span>
                 <span class="k">if</span> <span class="n">piece</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"N"</span> <span class="ow">and</span> <span class="n">colDistance</span> <span class="o">+</span> <span class="n">rowDistance</span> <span class="o">==</span> <span class="mi">3</span> \
                     <span class="ow">and</span> <span class="nb">min</span><span class="p">(</span><span class="n">colDistance</span><span class="p">,</span> <span class="n">rowDistance</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">kingChecked</span><span class="p">(</span><span class="n">gameArr</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">endRow</span><span class="p">,</span> <span class="n">endCol</span><span class="p">):</span>
                     
@@ -8120,6 +8132,8 @@ a.anchor-link {
                         <span class="k">return</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">kingChecked</span><span class="p">(</span><span class="n">gameArr</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">startRow</span><span class="p">,</span> <span class="n">startCol</span><span class="p">,</span> <span class="n">endRow</span><span class="p">,</span> <span class="n">endCol</span><span class="p">):</span>
+    <span class="c1"># Checks if a piece is pinned to its king</span>
+    <span class="c1"># Does this by first assuming the move takes place, and then checking if the king is left attacked</span>
     <span class="n">startPiece</span> <span class="o">=</span> <span class="n">gameArr</span><span class="p">[</span><span class="n">startRow</span><span class="p">][</span><span class="n">startCol</span><span class="p">]</span>
     <span class="n">gameArr</span><span class="p">[</span><span class="n">startRow</span><span class="p">][</span><span class="n">startCol</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">endPiece</span> <span class="o">=</span> <span class="n">gameArr</span><span class="p">[</span><span class="n">endRow</span><span class="p">][</span><span class="n">endCol</span><span class="p">]</span>
@@ -8162,6 +8176,7 @@ a.anchor-link {
     <span class="k">return</span> <span class="kc">False</span>
     
 <span class="k">def</span> <span class="nf">breakMoveUp</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
+    <span class="c1"># Break up the move into its piece, specifier, to break tie between multiple of the same piece, file, and rank</span>
     <span class="c1"># Get piece</span>
     <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'d'</span><span class="p">,</span> <span class="s1">'e'</span><span class="p">,</span> <span class="s1">'f'</span><span class="p">,</span> <span class="s1">'g'</span><span class="p">,</span> <span class="s1">'h'</span><span class="p">]</span>
     <span class="n">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">,</span> <span class="s1">'6'</span><span class="p">,</span> <span class="s1">'7'</span><span class="p">,</span> <span class="s1">'8'</span><span class="p">]</span>
@@ -8204,6 +8219,7 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">piece</span><span class="p">,</span> <span class="n">specifier</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">rank</span>
 
 <span class="k">def</span> <span class="nf">playMoves</span><span class="p">(</span><span class="n">moves</span><span class="p">):</span>
+    <span class="c1"># Play through the moves by calling makeMove repeatedly</span>
     <span class="n">gameArr</span> <span class="o">=</span> <span class="n">setupGame</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">moves</span><span class="p">)):</span>
         <span class="n">makeMove</span><span class="p">(</span><span class="n">gameArr</span><span class="p">,</span> <span class="n">moves</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
@@ -8232,6 +8248,7 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">whiteKingSafetyPenalty</span> <span class="o">-</span> <span class="n">blackKingSafetyPenalty</span>    
 
 <span class="k">def</span> <span class="nf">calculateKingSafetyPenalty</span><span class="p">(</span><span class="n">minRow</span><span class="p">,</span> <span class="n">maxRow</span><span class="p">,</span> <span class="n">minCol</span><span class="p">,</span> <span class="n">maxCol</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">gameArr</span><span class="p">):</span>
+    <span class="c1"># Open Files are -3 and Missing Pawns are -1</span>
     <span class="n">totalPenalty</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">minCol</span><span class="p">,</span> <span class="n">maxCol</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="c1"># Missing Pawn Check</span>
@@ -8276,6 +8293,7 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">whiteMobility</span> <span class="o">-</span> <span class="n">blackMobility</span>
                         
 <span class="k">def</span> <span class="nf">generateMobilityCombos</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">gameArr</span><span class="p">):</span>
+    <span class="c1"># Checking all possible ways each piece can move to determine number of legal squares</span>
     <span class="n">mobility</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">piece</span> <span class="o">==</span> <span class="s2">"N"</span><span class="p">:</span>
         <span class="n">nArr</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
@@ -8360,6 +8378,7 @@ a.anchor-link {
     <span class="k">return</span> <span class="n">whitePoints</span> <span class="o">-</span> <span class="n">blackPoints</span>
 
 <span class="k">def</span> <span class="nf">calcPoints</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="c1"># </span>
     <span class="n">points</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"B"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"N"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"Q"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">+</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"R"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span>
     <span class="k">if</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">"B"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">points</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -9333,8 +9352,8 @@ Please also refer to the documentation for alternative solver options:
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>From the graph above, we can see that the GradientBoostingClassifier and random forest is about equal, and KNeighbors performing the worst. This is also intuitive because gradient boosting and random forest are ensemble methods that combine multiple weak learners (descision trees in both cases) to create a strong learner. On the other hand, K-Nearest Neighbors (KNN) is a simpler algorithm that relies on the proximity of data points to make predictions. It may struggle with high-dimensional data and can be sensitive to the choice of the number of neighbors (k).</p>
-<p>Despite their similar performance, we will go with the gradient boosting classifier. This is because it is an iterative algorithm that progressively improves the model by focusing on the misclassified samples from previous iterations. This allows it to effectively handle difficult cases and achieve higher accuracy. This is what leads it to better performance over the random forest classifier. In contrast, KNN's performance heavily depends on the quality and relevance of the selected neighbors. If the neighbors are not representative of the true class distribution or if the features are not well-separated, KNN may struggle to make accurate predictions.</p>
+<p>From the graph above, we can see that the GradientBoostingClassifier and random forest are about equal, and KNeighbors performing the worst. This is also intuitive because gradient boosting and random forest are ensemble methods that combine multiple weak learners (descision trees in both cases) to create a strong learner. On the other hand, K-Nearest Neighbors (KNN) is a simpler algorithm that relies on the proximity of data points to make predictions. It may struggle with high-dimensional data and can be sensitive to the choice of the number of neighbors (k).</p>
+<p>Given their similar performance, we will go with the gradient boosting classifier. This is because it is an iterative algorithm that progressively improves the model by focusing on the misclassified samples from previous iterations. This allows it to effectively handle difficult cases and achieve higher accuracy. It also has more hyperparameters that can be tuned to improve overall performance. In contrast, KNN's performance heavily depends on the quality and relevance of the selected neighbors. If the neighbors are not representative of the true class distribution or if the features are not well-separated, KNN may struggle to make accurate predictions.</p>
 </div>
 </div>
 </div>
@@ -9841,8 +9860,8 @@ weighted avg       0.83      0.81      0.82    407208
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>Accuracy of Greater ELO Wins Benchmark: 42.68%
 Accuracy of Randomly Guessing Winner: 33.41%
-Accuracy of Random Forest Predictions (w/o hyperparameter): 75.04%
-Accuracy of Random Forest Predictions (w/ hyperparameter): 81.22%
+Accuracy of Gradient Boosting Predictions (w/o hyperparameter): 75.04%
+Accuracy of Gradient Boosting Predictions (w/ hyperparameter): 81.22%
 </pre>
 </div>
 </div>
@@ -9909,20 +9928,6 @@ from the results we can determine that mobility is the most important positional
 <p>Center Control: <a href="https://www.chessprogramming.org/Center_Control">https://www.chessprogramming.org/Center_Control</a></p>
 <p>Material Balance: <a href="https://www.chessprogramming.org/Material">https://www.chessprogramming.org/Material</a></p>
 <p>Number of moves for opening: <a href="https://www.chessable.com/blog/opening-guide/#:~:text=Discover-,Introduction%20to%20Chess%20Openings,the%20main%20fight%20takes%20place">https://www.chessable.com/blog/opening-guide/#:~:text=Discover-,Introduction%20to%20Chess%20Openings,the%20main%20fight%20takes%20place</a></p>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-</div>
 </div>
 </div>
 </div>
